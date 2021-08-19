@@ -9,9 +9,13 @@ jobs:
     - name: Package One
       env: TARGET=packages/one
       language: node_js
+      node_js:
+        - 14
 
     - name: Package Two
       env: TARGET=packages/two
       language: node_js
+      node_js:
+        - 14
 
 script: .travis/job.sh
