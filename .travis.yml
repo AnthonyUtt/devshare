@@ -1,0 +1,17 @@
+language: generic
+notifications:
+  email: false
+branches:
+  - production
+  - staging
+jobs:
+  include:
+    - name: Package One
+      env: TARGET=packages/one
+      language: node_js
+
+    - name: Package Two
+      env: TARGET=packages/two
+      language: node_js
+
+script: .travis/job.sh

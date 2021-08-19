@@ -1,0 +1,11 @@
+{
+  "name": "devshare",
+  "version": "1.0.0",
+  "repository": "gh_personal:AnthonyUtt/devshare.git",
+  "author": "AnthonyUtt <anthony@anthonyutt.dev>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "./packages/*"
+  ]
+}

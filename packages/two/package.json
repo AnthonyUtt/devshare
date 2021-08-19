@@ -1,0 +1,9 @@
+{
+  "name": "@devshare/two",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Tests running in package two!\""
+  }
+}
