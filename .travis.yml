@@ -16,6 +16,13 @@ jobs:
     - name: Mobile App Tests
       env: TARGET=packages/mobile
       script: .travis/tests.sh
+    - stage: Building
+      name: Front-End Build
+      env: TARGET=packages/frontend
+      script: .travis/build.sh
+    - name: Web App Build
+      env: TARGET=packages/web
+      script: .travis/build.sh
     - stage: Deployment
       name: Dummy Deployment
       script: skip
