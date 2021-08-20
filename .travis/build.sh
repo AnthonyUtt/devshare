@@ -7,7 +7,7 @@ if $SOURCE_DIR/package-check.sh $TRAVIS_COMMIT_RANGE $TARGET; then
     echo "Running job for $TARGET..."
     cd $TARGET
     yarn
-    yarn run test
+    yarn run build
 else
     echo "No changes detected for $TARGET."
 fi

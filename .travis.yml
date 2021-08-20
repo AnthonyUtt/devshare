@@ -11,7 +11,9 @@ jobs:
       env: TARGET=packages/frontend
       script: .travis/tests.sh
     - name: Web App Tests
-      env: TARGET=packages/web
+      env:
+        - TARGET=packages/web
+        - SKIP_PREFLIGHT_CHECK=true
       script: .travis/tests.sh
     - name: Mobile App Tests
       env: TARGET=packages/mobile
@@ -21,7 +23,9 @@ jobs:
       env: TARGET=packages/frontend
       script: .travis/build.sh
     - name: Web App Build
-      env: TARGET=packages/web
+      env:
+        - TARGET=packages/web
+        - SKIP_PREFLIGHT_CHECK=true
       script: .travis/build.sh
     - stage: Deployment
       name: Dummy Deployment
