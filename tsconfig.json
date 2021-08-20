@@ -3,6 +3,7 @@
     "references": [
         { "path": "./packages/frontend" },
         { "path": "./packages/web" },
-        { "path": "./packages/mobile" }
+        { "path": "./packages/mobile" },
+        { "path": "./packages/common" }
     ]
 }
