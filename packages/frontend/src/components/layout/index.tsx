@@ -51,6 +51,7 @@ const Layout: React.FC<LayoutProps> = ({
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        z-index: 50;
     `;
 
     const SwitchText = styled('p').use(() => ({

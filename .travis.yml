@@ -19,6 +19,7 @@ jobs:
     script: ".travis/tests.sh"
   - stage: Building
     name: Front-End Build
+    if: branch IN (production, staging)
     env: TARGET=packages/frontend
     script: ".travis/build.sh"
     workspaces:
@@ -26,6 +27,7 @@ jobs:
         name: fe_build
         paths: .
   - name: Web App Build
+    if: branch IN (production, staging)
     env: TARGET=packages/web
     script: ".travis/build.sh"
     workspaces:
