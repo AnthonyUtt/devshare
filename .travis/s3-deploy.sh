@@ -10,7 +10,7 @@ SOURCE_DIR=$( dirname "${BASH_SOURCE[0]}" )
 if $SOURCE_DIR/package-check.sh $TRAVIS_COMMIT_RANGE $TARGET; then
     echo "Running job for $TARGET..."
     cd $TARGET
-    if [ ! -d "$BUILD_DIR"] && [ ! -d "$PUBLIC_DIR" ]; then
+    if [ ! -d "$BUILD_DIR" ] && [ ! -d "$PUBLIC_DIR" ]; then
         echo "No build artifacts detected!"
         exit 1
     else
