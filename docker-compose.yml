@@ -1,0 +1,77 @@
+version: '3.6'
+services:
+    mongo:
+        image: mongo
+        container_name: "${PROJECT_NAME}_database"
+        restart: always
+        environment:
+            - MONGO_INITDB_DATABASE=${MONGO_DB}
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASS}
+            - MONGO_INITDB_USERNAME=${MONGO_USER}
+            - MONGO_INITDB_PASSWORD=${MONGO_PASS}
+        ports:
+            - ${MONGO_PORT}:${MONGO_PORT}
+        volumes:
+            - ./data/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
+            - ./data/mongodb/data/db/:/usr/src/data/db/
+    
+    api:
+        container_name: "${PROJECT_NAME}_backend"
+        restart: always
+        build:
+            context: .
+            dockerfile: ./packages/api/Dockerfile
+        environment:
+            - PORT=${API_PORT}
+            - MONGO_HOST=${MONGO_HOST}
+            - MONGO_PORT=${MONGO_PORT}
+            - MONGO_DB=${MONGO_DB}
+            - MONGO_USER=${MONGO_USER}
+            - MONGO_PASS=${MONGO_PASS}
+            - JWT_SECRET=${JWT_SECRET}
+        ports:
+            - ${API_PORT}:${API_PORT}
+        volumes:
+            - ./:/usr/src/app
+        links:
+            - mongo
+    
+    socket:
+        container_name: "${PROJECT_NAME}_socket"
+        restart: always
+        build:
+            context: .
+            dockerfile: ./packages/socket/Dockerfile
+        environment:
+            - PORT=${SOCKET_PORT}
+        ports:
+            - ${SOCKET_PORT}:${SOCKET_PORT}
+        volumes:
+            - ./:/usr/src/app
+        links:
+            - mongo
+            - api
+        
+    web:
+        container_name: "${PROJECT_NAME}_web"
+        build:
+            context: .
+            dockerfile: ./packages/web/Dockerfile
+        ports:
+            - ${WEBAPP_PORT}:${WEBAPP_PORT}
+        volumes:
+            - ./:/usr/src/app
+        links:
+            - api
+            - socket
+        
+    frontend:
+        container_name: "${PROJECT_NAME}_frontend"
+        build:
+            context: .
+            dockerfile: ./packages/frontend/Dockerfile
+        ports:
+            - ${FRONTEND_PORT}:${FRONTEND_PORT}
+        volumes:
+            - ./:/usr/src/app
