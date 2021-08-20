@@ -33,12 +33,57 @@ jobs:
         name: wa_build
         paths: .
   - stage: Deployment
-    name: Front-End Deployment
+    name: Front-End Staging Deployment
+    env:
+      - TARGET=packages/frontend
+      - BUCKET=s3://devshare-frontend-staging
+    workspaces:
+      use: fe_build
+    install: skip
+    script: skip
+    before_deploy: .travis/aws-setup.sh
+    deploy:
+      provider: script
+      script: .travis/s3-deploy.sh
+      skip_cleanup: true
+      on:
+        branch: staging
+  - name: Front-End Production Deployment
     env:
       - TARGET=packages/frontend
       - BUCKET=s3://devshare-frontend
     workspaces:
       use: fe_build
+    install: skip
+    script: skip
+    before_deploy: .travis/aws-setup.sh
+    deploy:
+      provider: script
+      script: .travis/s3-deploy.sh
+      skip_cleanup: true
+      on:
+        branch: production
+  - name: Web App Staging Deployment
+    env:
+      - TARGET=packages/web
+      - BUCKET=s3://devshare-webapp-staging
+    workspaces:
+      use: wa_build
+    install: skip
+    script: skip
+    before_deploy: .travis/aws-setup.sh
+    deploy:
+      provider: script
+      script: .travis/s3-deploy.sh
+      skip_cleanup: true
+      on:
+        branch: staging
+  - name: Web App Production Deployment
+    env:
+      - TARGET=packages/web
+      - BUCKET=s3://devshare-webapp
+    workspaces:
+      use: wa_build
     install: skip
     script: skip
     before_deploy: .travis/aws-setup.sh
