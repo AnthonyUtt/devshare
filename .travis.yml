@@ -24,12 +24,14 @@ jobs:
     workspaces:
       create:
         name: fe_build
+        paths: .
   - name: Web App Build
     env: TARGET=packages/web
     script: ".travis/build.sh"
     workspaces:
       create:
         name: wa_build
+        paths: .
   - stage: Deployment
     name: Front-End Deployment
     env:
