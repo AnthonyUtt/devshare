@@ -7,6 +7,13 @@ PUBLIC_DIR="./public"
 
 SOURCE_DIR=$( dirname "${BASH_SOURCE[0]}" )
 
+if [ ! -f "$SOURCE_DIR/awspath" ]; then
+    echo "Cannot find AWS CLI implementation!"
+    exit 2
+else
+    AWS=$(cat $SOURCE_DIR/awspath)
+fi
+
 if $SOURCE_DIR/package-check.sh $TRAVIS_COMMIT_RANGE $TARGET; then
     echo "Running job for $TARGET..."
     cd $TARGET

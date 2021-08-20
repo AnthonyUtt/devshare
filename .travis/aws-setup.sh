@@ -13,4 +13,4 @@ ABS_PATH=$(pwd)
 
 $ABS_PATH/aws/install --install-dir $ABS_PATH --bin-dir $ABS_PATH/bin
 
-export AWS=$ABS_PATH/bin/aws
+echo "$ABS_PATH/bin/aws" > awspath
