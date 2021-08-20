@@ -1,3 +1,5 @@
+os: linux
+dist: xenial
 language: node_js
 notifications:
   email: false
@@ -24,9 +26,7 @@ jobs:
     script: ".travis/build.sh"
     workspace: fe_build
   - name: Web App Build
-    env:
-    - TARGET=packages/web
-    - SKIP_PREFLIGHT_CHECK=true
+    env: TARGET=packages/web
     script: ".travis/build.sh"
     workspace: wa_build
   - stage: Deployment
@@ -44,6 +44,7 @@ jobs:
     
 env:
   global:
+  - SKIP_PREFLIGHT_CHECK=true
   - AWS_CLI_AUTO_PROMPT=on
   - AWS_DEFAULT_REGION=us-east-1
   - AWS_DEFAULT_OUTPUT=json
