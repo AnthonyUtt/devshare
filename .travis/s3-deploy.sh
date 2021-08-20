@@ -27,7 +27,8 @@ if $SOURCE_DIR/package-check.sh $TRAVIS_COMMIT_RANGE $TARGET; then
         else
             cd $PUBLIC_DIR
         fi
-        $AWS s3 sync . $BUCKET
+        echo "Changed directory to $(pwd)"
+        $AWS s3 sync . $BUCKET --delete
     fi
 else
     echo "No changes detected for $TARGET."
