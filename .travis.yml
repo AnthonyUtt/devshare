@@ -3,9 +3,6 @@ dist: xenial
 language: node_js
 notifications:
   email: false
-branches:
-- production
-- staging
 jobs:
   include:
   - stage: Testing
@@ -41,6 +38,8 @@ jobs:
     deploy:
       provider: script
       script: .travis/s3-deploy.sh
+      on:
+        branch: production
     
 env:
   global:
