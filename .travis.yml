@@ -21,17 +21,22 @@ jobs:
     name: Front-End Build
     env: TARGET=packages/frontend
     script: ".travis/build.sh"
-    workspace: fe_build
+    workspaces:
+      create:
+        name: fe_build
   - name: Web App Build
     env: TARGET=packages/web
     script: ".travis/build.sh"
-    workspace: wa_build
+    workspaces:
+      create:
+        name: wa_build
   - stage: Deployment
     name: Front-End Deployment
     env:
       - TARGET=packages/frontend
       - BUCKET=s3://devshare-frontend
-    use: fe_build
+    workspaces:
+      use: fe_build
     install: skip
     script: skip
     before_deploy: .travis/aws-setup.sh
