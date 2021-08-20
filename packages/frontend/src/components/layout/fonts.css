@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Conthrax';
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+    src: url('../../assets/fonts/conthrax/conthrax-el-webfont.woff2')
+            format('woff2'),
+        url('../../assets/fonts/conthrax/conthrax-el-webfont.woff')
+            format('woff');
+}
+@font-face {
+    font-family: 'Conthrax';
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url('../../assets/fonts/conthrax/conthrax-sb-webfont.woff2')
+            format('woff2'),
+        url('../../assets/fonts/conthrax/conthrax-sb-webfont.woff')
+            format('woff');
+}

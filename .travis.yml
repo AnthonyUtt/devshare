@@ -1,4 +1,4 @@
-language: generic
+language: node_js
 notifications:
   email: false
 branches:
@@ -6,16 +6,13 @@ branches:
   - staging
 jobs:
   include:
-    - name: Package One
-      env: TARGET=packages/one
-      language: node_js
-      node_js:
-        - 14
-
-    - name: Package Two
-      env: TARGET=packages/two
-      language: node_js
-      node_js:
-        - 14
-
-script: .travis/job.sh
+    - stage: Testing
+      name: Front-End Tests
+      env: TARGET=packages/frontend
+      script: .travis/tests.sh
+    - name: Dummy Tests
+      script: echo "Hello world!"
+    - stage: Deployment
+      name: Dummy Deployment
+      script: skip
+      after_script: echo "Deployed!"
