@@ -10,8 +10,12 @@ jobs:
       name: Front-End Tests
       env: TARGET=packages/frontend
       script: .travis/tests.sh
-    - name: Dummy Tests
-      script: echo "Hello world!"
+    - name: Web App Tests
+      env: TARGET=packages/web
+      script: .travis/tests.sh
+    - name: Mobile App Tests
+      env: TARGET=packages/mobile
+      script: .travis/tests.sh
     - stage: Deployment
       name: Dummy Deployment
       script: skip
