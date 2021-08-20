@@ -39,7 +39,7 @@ jobs:
     if: branch = staging
     env:
       - TARGET=packages/frontend
-      - BUCKET=s3://devshare-frontend-staging
+      - BUCKET=s3://staging.devshare.gg
     workspaces:
       use: fe_build
     install: skip
@@ -55,7 +55,7 @@ jobs:
     if: branch = production
     env:
       - TARGET=packages/frontend
-      - BUCKET=s3://devshare-frontend
+      - BUCKET=s3://devshare.gg
     workspaces:
       use: fe_build
     install: skip
@@ -71,7 +71,7 @@ jobs:
     if: branch = staging
     env:
       - TARGET=packages/web
-      - BUCKET=s3://devshare-webapp-staging
+      - BUCKET=s3://staging.app.devshare.gg
     workspaces:
       use: wa_build
     install: skip
@@ -87,7 +87,7 @@ jobs:
     if: branch = production
     env:
       - TARGET=packages/web
-      - BUCKET=s3://devshare-webapp
+      - BUCKET=s3://app.devshare.gg
     workspaces:
       use: wa_build
     install: skip
