@@ -13,6 +13,8 @@ jobs:
           - package: "frontend"
           - package: "web"
           - package: "mobile"
+    env:
+      - SKIP_PREFLIGHT_CHECK=true
     steps:
       - uses: actions/checkout@v2
       - name: Get Node version from .nvmrc
