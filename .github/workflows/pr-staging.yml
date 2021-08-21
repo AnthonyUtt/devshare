@@ -182,6 +182,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: 2
+          verbose: true
       - name: Sync build with S3 Bucket
         run: aws s3 sync . ${{ secrets.FRONTEND_BUCKET_STAGING }} --delete
 
@@ -200,5 +201,6 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: 2
+          verbose: true
       - name: Sync build with S3 Bucket
         run: aws s3 sync . ${{ secrets.WEBAPP_BUCKET_STAGING }} --delete
