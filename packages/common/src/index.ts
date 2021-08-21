@@ -1,3 +1,3 @@
-const hello = () => 'Hello, world!';
+import * as theme from './theme';
 
-export default hello;
+export { theme };

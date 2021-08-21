@@ -3,7 +3,8 @@ import { styled } from 'tsstyled';
 import './fonts.css';
 
 // Theme
-import { useTheme, useDarkTheme, ThemeProvider, GlobalStyles } from './theme';
+//import { useTheme, useDarkTheme, ThemeProvider, GlobalStyles } from './theme';
+import { theme } from '@devshare/common';
 
 // Components
 import Head from './head';
@@ -30,8 +31,8 @@ const Layout: React.FC<LayoutProps> = ({
     authorHandle,
     children,
 }) => {
+    const { useTheme, ThemeProvider, GlobalStyles } = theme;
     const [darkMode, setDarkMode] = useState(false);
-    const darkTheme = useDarkTheme();
 
     const LayoutContainer = styled('div').use(() => ({
         theme: useTheme(), // eslint-disable-line
@@ -57,7 +58,6 @@ const Layout: React.FC<LayoutProps> = ({
     const SwitchText = styled('p').use(() => ({
         theme: useTheme(), // eslint-disable-line
     }))`
-        color: ${props => props.theme.lightFontColor};
         font-weight: ${props => props.theme.lightFontWeight};
         font-size: 1rem;
         margin: 0;
@@ -76,14 +76,7 @@ const Layout: React.FC<LayoutProps> = ({
                 type={type}
                 authorHandle={authorHandle}
             />
-            <ThemeProvider
-                value={current => {
-                    if (!darkMode) {
-                        return current;
-                    }
-                    return darkTheme;
-                }}
-            >
+            <ThemeProvider isDark={darkMode}>
                 <GlobalStyles />
                 <LayoutContainer>
                     <SwitchContainer>
@@ -100,5 +93,4 @@ const Layout: React.FC<LayoutProps> = ({
     );
 };
 
-export { useTheme };
 export default Layout;

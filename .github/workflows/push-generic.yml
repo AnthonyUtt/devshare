@@ -1,0 +1,36 @@
+name: Standard Branch Push Workflow
+on:
+  push:
+    branches_ignore:
+      - production
+jobs:
+  run-sanity-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - package: "common"
+          - package: "frontend"
+          - package: "web"
+          - package: "mobile"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Node version from .nvmrc
+        id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '${{ steps.nvmrc.outputs.node_version }}'
+      - name: Install Yarn
+        run: npm install --global yarn
+      - name: Install dependencies
+        run: yarn
+        run: yarn lerna add @devshare/common
+        run: yarn lerna bootstrap
+      - name: Run Linter
+        run: yarn lint
+      - name: Build Package
+        run: yarn lerna run build --stream --scope @devshare/${{ matrix.package }}
+      - name: Run Tests
+        run: yarn lerna run test --stream --scope @devshare/${{ matrix.package }}

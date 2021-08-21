@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { styled } from 'tsstyled';
-import { useTheme } from './theme';
+import { theme } from '@devshare/common';
 
 interface SwitchProps {
     initialState: boolean;
@@ -11,6 +11,7 @@ const Switch: React.FC<SwitchProps> = ({
     initialState,
     stateChangeCallback,
 }) => {
+    const { useTheme } = theme;
     const [state, setState] = useState(initialState);
 
     const onClick = useCallback(() => {

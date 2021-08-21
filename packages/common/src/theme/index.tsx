@@ -1,3 +1,4 @@
+import React from 'react';
 import { createTheme, styled, css } from 'tsstyled';
 
 const colors = {
@@ -29,120 +30,125 @@ const [useTheme, ThemeProvider] = createTheme({
 
     copyFontFamily: fonts.copyFontFamily,
     copyFontWeight: 300,
-    copyFontColor: colors.navy,
-
-    lightFontColor: colors.navy,
     lightFontWeight: 100,
 });
 
-const [useDarkTheme] = createTheme({
-    isDark: true,
-    // Colors
-    foregroundColor: colors.paleBlue,
-    backgroundColor: colors.navy,
-    primary: colors.sage,
-    secondary: colors.blue,
-    tertiary: colors.red,
+interface ThemeProviderProps {
+    isDark: boolean;
+    children: React.ReactNode;
+}
 
-    // Fonts
-    accentFontFamily: fonts.accentFontFamily,
-    accentFontWeight: 500,
-    accentFontColor: colors.blue,
-
-    copyFontFamily: fonts.copyFontFamily,
-    copyFontWeight: 300,
-    copyFontColor: colors.paleBlue,
-
-    lightFontColor: colors.paleBlue,
-    lightFontWeight: 100,
-});
+const CustomThemeProvider: React.FC<ThemeProviderProps> = ({
+    isDark,
+    children,
+}) => (
+    <ThemeProvider
+        value={({
+            foregroundColor,
+            backgroundColor,
+            primary,
+            secondary,
+            ...current
+        }) => ({
+            ...current,
+            isDark,
+            foregroundColor:
+                isDark === current.isDark ? foregroundColor : backgroundColor,
+            backgroundColor:
+                isDark === current.isDark ? backgroundColor : foregroundColor,
+            primary: isDark === current.isDark ? primary : secondary,
+            secondary: isDark === current.isDark ? secondary : primary,
+        })}
+    >
+        {children}
+    </ThemeProvider>
+);
 
 const cssReset = css`
     /* http://meyerweb.com/eric/tools/css/reset/ 
-    v2.0 | 20110126
-    License: none (public domain)
-    */
-
-    html,
-    body,
-    div,
-    span,
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+    a,
+    abbr,
+    acronym,
+    address,
     applet,
-    object,
-    iframe,
+    article,
+    aside,
+    audio,
+    b,
+    big,
+    blockquote,
+    body,
+    canvas,
+    caption,
+    center,
+    cite,
+    code,
+    dd,
+    del,
+    details,
+    dfn,
+    div,
+    dl,
+    dt,
+    em,
+    embed,
+    fieldset,
+    figcaption,
+    figure,
+    footer,
+    form,
     h1,
     h2,
     h3,
     h4,
     h5,
     h6,
-    p,
-    blockquote,
-    pre,
-    a,
-    abbr,
-    acronym,
-    address,
-    big,
-    cite,
-    code,
-    del,
-    dfn,
-    em,
+    header,
+    hgroup,
+    html,
+    i,
+    iframe,
     img,
     ins,
     kbd,
+    label,
+    legend,
+    li,
+    mark,
+    menu,
+    nav,
+    object,
+    ol,
+    output,
+    p,
+    pre,
     q,
+    ruby,
     s,
     samp,
+    section,
     small,
+    span,
     strike,
     strong,
     sub,
-    sup,
-    tt,
-    var,
-    b,
-    u,
-    i,
-    center,
-    dl,
-    dt,
-    dd,
-    ol,
-    ul,
-    li,
-    fieldset,
-    form,
-    label,
-    legend,
-    table,
-    caption,
-    tbody,
-    tfoot,
-    thead,
-    tr,
-    th,
-    td,
-    article,
-    aside,
-    canvas,
-    details,
-    embed,
-    figure,
-    figcaption,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    output,
-    ruby,
-    section,
     summary,
+    sup,
+    table,
+    tbody,
+    td,
+    tfoot,
+    th,
+    thead,
     time,
-    mark,
-    audio,
+    tr,
+    tt,
+    u,
+    ul,
+    var,
     video {
         margin: 0;
         padding: 0;
@@ -151,7 +157,6 @@ const cssReset = css`
         font: inherit;
         vertical-align: baseline;
     }
-    /* HTML5 display-role reset for older browsers */
     article,
     aside,
     details,
@@ -176,10 +181,10 @@ const cssReset = css`
     q {
         quotes: none;
     }
-    blockquote:before,
     blockquote:after,
-    q:before,
-    q:after {
+    blockquote:before,
+    q:after,
+    q:before {
         content: '';
         content: none;
     }
@@ -196,9 +201,9 @@ const GlobalStyles = styled('style').use(() => ({
     :root {
         font-family: ${props => props.theme.copyFontFamily};
         font-weight: ${props => props.theme.copyFontWeight};
-        color: ${props => props.theme.copyFontColor};
+        color: ${props => props.theme.foregroundColor};
         box-sizing: border-box;
     }
 `;
 
-export { useTheme, useDarkTheme, ThemeProvider, GlobalStyles };
+export { useTheme, CustomThemeProvider as ThemeProvider, GlobalStyles };

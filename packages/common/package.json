@@ -1,9 +1,13 @@
 {
     "name": "@devshare/common",
     "version": "1.0.0",
-    "main": "src/index.ts",
+    "main": "dist/src/index.js",
+    "types": "dist/src/index.d.ts",
     "license": "MIT",
     "private": true,
+    "files": [
+        "/dist"
+    ],
     "devDependencies": {
         "@types/node": "^16.6.2",
         "@types/react": "^17.0.19",
@@ -14,6 +18,7 @@
         "tsstyled": "^1.2.8"
     },
     "scripts": {
-        "build": "tsc --build ."
+        "build": "tsc --build .",
+        "test": "echo \"Running tests in common!\""
     }
 }
