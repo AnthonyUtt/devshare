@@ -3,6 +3,7 @@ on:
   push:
     branches_ignore:
       - production
+      - staging
 jobs:
   build-local-package:
     runs-on: ubuntu-latest
