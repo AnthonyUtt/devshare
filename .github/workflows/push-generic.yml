@@ -28,7 +28,7 @@ jobs:
         run: npm install --global yarn
       - name: Install dependencies
         run: yarn
-      - run: yarn lerna add @devshare/common
+      - run: yarn lerna add @devshare/common --no-ci
       - run: yarn lerna bootstrap --no-ci
       - name: Run Linter
         run: yarn lint
