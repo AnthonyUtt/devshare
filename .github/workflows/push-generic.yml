@@ -27,11 +27,12 @@ jobs:
       - name: Install Yarn
         run: npm install --global yarn
       - name: Install dependencies
-        run: yarn
-      - run: yarn lerna bootstrap --no-ci
+        run: yarn install --frozen-lockfile
+      - run: yarn bootstrap
+      - run: yarn lerna add @devshare/common --no-ci
       - name: Run Linter
         run: yarn lint
-      - name: Link Locals & Build Package
-        run: yarn lerna add @devshare/common --scope @devshare/${{ matrix.package }} --no-ci && yarn lerna run build --stream --scope @devshare/${{ matrix.package }}
+      - name: Build Package
+        run: yarn lerna run build --stream --scope @devshare/${{ matrix.package }}
       - name: Run Tests
         run: yarn lerna run test --stream --scope @devshare/${{ matrix.package }}
