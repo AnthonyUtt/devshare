@@ -79,7 +79,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run package-check.sh
-        run: .github/scripts/package-check.sh staging ${{ github.event }} packages/frontend && echo "::set-output name=should_run::true"
+        run: .github/scripts/package-check.sh staging ${{ github.event.pull_request.head.sha }} packages/frontend && echo "::set-output name=should_run::true"
+        shell: bash
         id: should_run
         continue-on-error: true
 
@@ -125,7 +126,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run package-check.sh
-        run: .github/scripts/package-check.sh staging ${{ github.event }} packages/web && echo "::set-output name=should_run::true"
+        run: .github/scripts/package-check.sh staging ${{ github.event.pull_request.head.sha }} packages/web && echo "::set-output name=should_run::true"
+        shell: bash
         id: should_run
         continue-on-error: true
   
