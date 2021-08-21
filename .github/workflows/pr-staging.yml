@@ -1,7 +1,7 @@
 name: Pull Request to Staging
 on:
   pull_request:
-    types: [opened,reopened,edited]
+    types: [opened,reopened]
     branches:
       - staging
 jobs:
@@ -79,8 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run package-check.sh
-        run: .github/scripts/package-check.sh staging ${{ github.event.pull_request.head.sha }} packages/frontend && echo "::set-output name=should_run::true"
-        shell: bash
+        run: git diff --merge-base staging --name-only | sort -u | uniq | grep packages/frontend > /dev/null && echo "::set-output name=should_run::true"
         id: should_run
         continue-on-error: true
 
@@ -126,7 +125,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check Package Diff
-        run: git diff --name-only ${{ github.event.pull_request.head.sha }}..$(git merge-base staging ${{ github.event.pull_request.head.sha }}) | sort -u | uniq | grep $PATH > /dev/null && echo "::set-output name=should_run::true"
+        run: git diff --merge-base staging --name-only | sort -u | uniq | grep packages/web > /dev/null && echo "::set-output name=should_run::true"
         id: should_run
         continue-on-error: true
   
