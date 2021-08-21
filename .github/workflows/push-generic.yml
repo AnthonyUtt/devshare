@@ -55,6 +55,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: common-dist
+          path: packages/common/dist
       - name: Install Yarn
         run: npm install --global yarn
       - name: Install dependencies
