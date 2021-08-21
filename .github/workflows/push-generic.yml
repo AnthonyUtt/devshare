@@ -28,11 +28,10 @@ jobs:
         run: npm install --global yarn
       - name: Install dependencies
         run: yarn
-      - run: yarn lerna add @devshare/common --no-ci
       - run: yarn lerna bootstrap --no-ci
       - name: Run Linter
         run: yarn lint
-      - name: Build Package
-        run: yarn lerna run build --stream --scope @devshare/${{ matrix.package }}
+      - name: Link Locals & Build Package
+        run: yarn lerna add @devshare/common --scope @devshare/${{ matrix.package }} --no-ci && yarn lerna run build --stream --scope @devshare/${{ matrix.package }}
       - name: Run Tests
         run: yarn lerna run test --stream --scope @devshare/${{ matrix.package }}
