@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: git fetch
       - name: Check Package Diff
-        run: git diff --name-only ${{ github.event.before }}..${{ github.event.after }} | sort -u | uniq | grep packages/frontend > /dev/null && echo "::set-output name=should_run::true"
+        run: git diff --name-only ${{ github.event.before }}..HEAD | sort -u | uniq | grep packages/frontend > /dev/null && echo "::set-output name=should_run::true"
         id: should_run
         continue-on-error: true
 
