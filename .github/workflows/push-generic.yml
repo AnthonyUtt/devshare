@@ -1,7 +1,7 @@
 name: Standard Branch Push Workflow
 on:
   push:
-    branches_ignore:
+    branches-ignore:
       - production
       - staging
 jobs:
