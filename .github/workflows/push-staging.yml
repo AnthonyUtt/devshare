@@ -1,8 +1,9 @@
-name: Push to Production
+name: Pull Request to Staging
 on:
-  push:
+  pull_request:
+    types: [opened,reopened,synchronize]
     branches:
-      - production
+      - staging
 jobs:
   build-local-package:
     runs-on: ubuntu-latest
@@ -30,7 +31,7 @@ jobs:
           name: common-dist
           path: |
             packages/common/dist
-
+  
   check_frontend_build:
     needs: build-local-package
     runs-on: ubuntu-latest
@@ -146,7 +147,7 @@ jobs:
           version: 2
           verbose: true
       - name: Sync build with S3 Bucket
-        run: "aws s3 sync . s3://devshare.gg --delete"
+        run: "aws s3 sync . s3://staging.devshare.gg --delete"
 
   deploy-web:
     needs: build-web
@@ -167,4 +168,4 @@ jobs:
           version: 2
           verbose: true
       - name: Sync build with S3 Bucket
-        run: "aws s3 sync . s3://app.devshare.gg --delete"
+        run: "aws s3 sync . s3://app-staging.devshare.gg --delete"
