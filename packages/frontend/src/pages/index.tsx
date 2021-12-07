@@ -1,9 +1,12 @@
 import React from 'react';
 import { styled } from 'tsstyled';
+import { theme } from '@devshare/common';
 
 // Components
-import Layout, { useTheme } from '../components/layout';
+import Layout from '../components/layout';
 import { InlineLogo } from '../components/logos';
+
+const { useTheme } = theme;
 
 const BoxContainer = styled('div')`
     width: 100%;
@@ -12,7 +15,6 @@ const BoxContainer = styled('div')`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    position: relative;
 `;
 
 const MainText = styled('p')`
@@ -48,7 +50,6 @@ const SubText = styled('p').use(() => ({
     theme: useTheme(),
 }))`
     font-size: 1rem;
-    color: ${props => props.theme.lightFontColor};
     font-weight: ${props => props.theme.lightFontWeight};
 `;
 

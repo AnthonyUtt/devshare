@@ -9,6 +9,7 @@
         "./packages/*"
     ],
     "scripts": {
+        "bootstrap": "lerna bootstrap --use-workspaces --no-ci",
         "dev": "lerna run dev --stream --parallel",
         "build": "lerna run build --concurrency 1 --stream",
         "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",

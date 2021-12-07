@@ -2,6 +2,11 @@
 .tmp/
 public/
 nodeModules/
+
+**/build/
+**/public/
+**/dist/
+
 *.log
 *.production
 **/package.json
