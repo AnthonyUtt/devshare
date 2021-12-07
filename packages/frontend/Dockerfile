@@ -16,4 +16,4 @@ COPY . .
 
 EXPOSE 8000:8000
 
-CMD ["yarn", "lerna", "run", "start", "--stream", "--scope", "@devshare/frontend"]
+CMD ["yarn", "workspace", "@devshare/frontend", "run", "dev"]
