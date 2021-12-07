@@ -1,0 +1,141 @@
+name: Push to Production
+on:
+  push:
+    branches:
+      - production
+jobs:
+  check_frontend_build:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: git fetch
+      - name: Run package-check.sh
+        run: git diff --name-only ${{ github.event.push.before }}..${{ github.event.push.after }} | sort -u | uniq | grep packages/frontend > /dev/null && echo "::set-output name=should_run::true"
+        id: should_run
+        continue-on-error: true
+
+  build-frontend:
+    needs: check_frontend_build
+    if: ${{ needs.check_frontend_build.outputs.should_run == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Node version from .nvmrc
+        id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '${{ steps.nvmrc.outputs.node_version }}'
+      - name: Download Local Package Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: common-dist
+          path: packages/common/dist
+      - name: Install Yarn
+        run: npm install --global yarn
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - run: yarn bootstrap
+      - run: yarn lerna add @devshare/common --no-ci
+      - run: yarn lerna link --force-local
+      - name: Build Package
+        run: yarn lerna run build --stream --scope @devshare/frontend
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-build-artifacts
+          path: |
+            packages/frontend/public
+  
+  check_web_build:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: git fetch
+      - name: Check Package Diff
+        run: git diff --name-only ${{ github.event.push.before }}..${{ github.event.push.after }} | sort -u | uniq | grep packages/web > /dev/null && echo "::set-output name=should_run::true"
+        id: should_run
+        continue-on-error: true
+  
+  build-web:
+    needs: check_web_build
+    if: ${{ needs.check_web_build.outputs.should_run == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      SKIP_PREFLIGHT_CHECK: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Node version from .nvmrc
+        id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '${{ steps.nvmrc.outputs.node_version }}'
+      - name: Download Local Package Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: common-dist
+          path: packages/common/dist
+      - name: Install Yarn
+        run: npm install --global yarn
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - run: yarn bootstrap
+      - run: yarn lerna add @devshare/common --no-ci
+      - run: yarn lerna link --force-local
+      - name: Build Package
+        run: yarn lerna run build --stream --scope @devshare/web
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: web-build-artifacts
+          path: |
+            packages/web/build
+  
+  deploy-frontend:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_OUTPUT: json
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend-build-artifacts
+      - name: Install AWS CLI v2
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+          verbose: true
+      - name: Sync build with S3 Bucket
+        run: "aws s3 sync . s3://devshare.gg --delete"
+
+  deploy-web:
+    needs: build-web
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_OUTPUT: json
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: web-build-artifacts
+      - name: Install AWS CLI v2
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+          verbose: true
+      - name: Sync build with S3 Bucket
+        run: "aws s3 sync . s3://app.devshare.gg --delete"
