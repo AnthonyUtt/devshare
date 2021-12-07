@@ -37,12 +37,15 @@ jobs:
     outputs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v2
-      - run: git fetch
+      - name: Checkout Entire Repo History
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Check Package Diff
-        run: git diff --name-only HEAD..${{ github.event.after }} | sort -u | uniq | grep packages/frontend > /dev/null && echo "::set-output name=should_run::true"
+        run: git diff --name-only ${{ github.event.before }}..${{ github.event.after }} | sort -u | uniq | grep packages/frontend > /dev/null && echo "::set-output name=should_run::true"
         id: should_run
         continue-on-error: true
+      - run: echo "${{ github.event.compare }}"
 
   build-frontend:
     needs: check_frontend_build

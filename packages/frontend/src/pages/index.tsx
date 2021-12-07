@@ -62,7 +62,7 @@ const IndexPage: React.FC = () => {
             <BoxContainer>
                 <MainText>Future home of</MainText>
                 <StyledLogo />
-                <SubText>Coming Winter 2021 </SubText>
+                <SubText>Coming Winter 2021</SubText>
             </BoxContainer>
         </Layout>
     );
